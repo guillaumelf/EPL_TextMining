@@ -10,10 +10,10 @@ from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
 
-consumer_key = 'Your consumer key'
-consumer_secret = 'Your secret consumer key'
-access_token = 'Your access token'
-access_secret = 'Your secret access token'
+consumer_key = 'zOGQ2hg92J0pFbKq9vFg2U57x'
+consumer_secret = '9p5ABXZ2hc3EqklGY59CgdVxGG9AVZLR7ODo7zePsg76OGnYWh'
+access_token = '275977750-0mt28ljghdDRFfF4ZGHu1CZwl6adtPvMMwMRRS7p'
+access_secret = 'csBQf2KPKvf8a4Cff2yiPa1Wu12qMr2UMVepCHiKzuRK7'
 
 #This is an advanced listener that prints received tweets to stdout and writes them in a file.
 class StdOutListener(StreamListener):
@@ -40,5 +40,5 @@ if __name__ == '__main__':
     stream = Stream(auth, l)
 
     #This line filter Twitter Streams to capture data by the keywords: the names of the 'Big 6' managers
-    stream.filter(track=['wenger','guardiola','mourinho','klopp','pochettino','conte'])
+    stream.filter(track=['#worldcup2018'])
     

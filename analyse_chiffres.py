@@ -11,7 +11,6 @@ Created on Sat Nov  4 17:19:15 2017
 import json
 import pandas as pd
 import matplotlib.pyplot as plt
-from concurrent.futures import ThreadPoolExecutor
 import re
 
 ### Définition locale de fonctions
@@ -45,11 +44,10 @@ print('Nombre de tweets : '+str(len(tweets_data)))
 ##########################
 
 tweets = pd.DataFrame()
-e = ThreadPoolExecutor()
 
-tweets['text'] = e.map(lambda tweet: tweet['text'], tweets_data)
-tweets['lang'] = e.map(lambda tweet: tweet['lang'], tweets_data)
-tweets['country'] = e.map(lambda tweet: tweet['place']['country'] if tweet['place'] != None else None, tweets_data)
+tweets['text'] = list(map(lambda tweet: tweet['text'], tweets_data))
+tweets['lang'] = list(map(lambda tweet: tweet['lang'], tweets_data))
+tweets['country'] = list(map(lambda tweet: tweet['place']['country'] if tweet['place'] != None else None, tweets_data))
 
 tweets_by_lang = tweets['lang'].value_counts()
 
@@ -71,13 +69,12 @@ ax.set_ylabel('Number of tweets' , fontsize=15)
 ax.set_title('Top 5 countries', fontsize=15, fontweight='bold')
 tweets_by_country[:5].plot(ax=ax, kind='bar', color='blue')
 
-tweets['guardiola'] = tweets['text'].apply(lambda tweet: word_in_text('guardiola', tweet))
-tweets['mourinho'] = tweets['text'].apply(lambda tweet: word_in_text('mourinho', tweet))
-tweets['conte'] = tweets['text'].apply(lambda tweet: word_in_text('conte', tweet))
-tweets['wenger'] = tweets['text'].apply(lambda tweet: word_in_text('wenger', tweet))
-tweets['klopp'] = tweets['text'].apply(lambda tweet: word_in_text('klopp', tweet))
-tweets['pochettino'] = tweets['text'].apply(lambda tweet: word_in_text('pochettino', tweet))
+# Nettoyage et extraction des tweets en français et en anglais
 
+english_tweets = tweets[tweets.lang=='en'].drop_duplicates()
+french_tweets = tweets[tweets.lang=='fr'].drop_duplicates()
+english_tweets.to_csv('tweets_en.csv',sep=';',header=True,decimal='.',encoding='utf-8',index=False) 
+french_tweets.to_csv('tweets_fr.csv',sep=';',header=True,decimal='.',encoding='utf-8',index=False) 
 
 
 

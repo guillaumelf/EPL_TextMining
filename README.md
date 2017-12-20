@@ -1,3 +1,3 @@
-# EPL_TextMining
+# twitter_textmining
 
-Quick introdction about scraping tweets with **python** library *tweepy* (v. 3.3.0) to perform some Text Mining methods on the subsequent data
+Quick introduction about scraping tweets with **python** library *tweepy* (v. 3.3.0) to perform some Text Mining methods on the subsequent data

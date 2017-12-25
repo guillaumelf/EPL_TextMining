@@ -1,0 +1,43 @@
+# Plan de travail
+
+## Problématique ==> Ok !
+
+- Wenger vs Mourinho : qui est le plus populaire ? => calcul d'un score de popularité
+- Pour chaque manager : analyse du texte pour ressortir les caractéristiques, l'image qu'ils donnent
+
+## Extraction des données ==> Ok !
+
+-Scrapping de tweets avec l'API twitter en python (tweepy)
+-Nettoyage des tweets (on enlève les doublons)
+-Séparation des tweets qui concernent Wenger et Mourniho, puis écriture dans deux fichiers csv
+
+## Pré-traitement ==> A faire !
+
+Voir le TD5 avec NLTK et N-grams pour les tâches à réaliser :
+
+-Importer les 2 dataframes contenant les tweets sur Wenger et Mourinho
+-Regrouper les tweets en une chaîne de caractères (1 pour Wenger, 1 pour Mourinho)
+Pour chacune de ces chaînes de caractères :
+-Tokenisation
+-Elimination des mots vides
+-Calcul des fréquences
+-Racinisation
+-Lemmatisation => http://cental.fltr.ucl.ac.be/treetagger/index.html
+-N-grams
+
+## Représentations textuelles ==> A faire !
+
+-Nuage de mots (outil wordle.net) pour chaque manager
+-Nuage de N-grams pour chaque manager
+
+## Analyse plus poussée ==> A faire !
+
+-Calcul d'un score de popularité pour chaque manager et comparaison : qui est le plus populaire ? => http://fjavieralba.com/basic-sentiment-analysis-with-python.html
+-Classification supervisée des tweets : positif et négatif. Dans un deuxième temps : extraction des reproches et louanges pour chacun
+=> nuage de mots
+
+## Rédaction du rapport et du bilan => A faire !
+
+-Justifier les choix à chaque étape
+-Exposer les problèmes rencontrés et les solutions mises en oeuvre pour les régler
+-Donner notre ressenti personnel sur la fouille de texte

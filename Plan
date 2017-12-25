@@ -9,7 +9,7 @@
 
 -Scrapping de tweets avec l'API twitter en python (tweepy)
 -Nettoyage des tweets (on enlève les doublons)
--Séparation des tweets qui concernent Wenger et Mourniho, puis écriture dans deux fichiers csv
+-Séparation des tweets qui concernent Wenger et Mourinho, puis écriture dans deux fichiers csv
 
 ## Pré-traitement ==> A faire !
 
@@ -18,12 +18,12 @@ Voir le TD5 avec NLTK et N-grams pour les tâches à réaliser :
 -Importer les 2 dataframes contenant les tweets sur Wenger et Mourinho
 -Regrouper les tweets en une chaîne de caractères (1 pour Wenger, 1 pour Mourinho)
 Pour chacune de ces chaînes de caractères :
--Tokenisation
--Elimination des mots vides
--Calcul des fréquences
--Racinisation
--Lemmatisation => http://cental.fltr.ucl.ac.be/treetagger/index.html
--N-grams
+-Tokenisation (from nltk.tokenize import sent_tokenize)
+-Elimination des mots vides (from nltk.corpus import stopwords)
+-Calcul des fréquences (nltk.FreqDist)
+-Racinisation (from nltk.stem.porter import PorterStemmer)
+-Lemmatisation (from nltk.stem import WordNetLemmatizer)
+-N-grams (from nltk.util import ngrams)
 
 ## Représentations textuelles ==> A faire !
 
@@ -32,8 +32,8 @@ Pour chacune de ces chaînes de caractères :
 
 ## Analyse plus poussée ==> A faire !
 
--Calcul d'un score de popularité pour chaque manager et comparaison : qui est le plus populaire ? => http://fjavieralba.com/basic-sentiment-analysis-with-python.html
--Classification supervisée des tweets : positif et négatif. Dans un deuxième temps : extraction des reproches et louanges pour chacun
+-Calcul d'un score de popularité pour chaque manager et comparaison : qui est le plus populaire ? => http://www.nltk.org/howto/sentiment.html
+-Classification des tweets : positifs et négatifs. Dans un deuxième temps : extraction des reproches et louanges pour chacun
 => nuage de mots
 
 ## Rédaction du rapport et du bilan => A faire !

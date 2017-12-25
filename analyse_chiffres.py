@@ -24,8 +24,11 @@ def word_in_text(word, text):
         return True
     return False
 
-### Import des données
-######################
+def extract_key(tweet,key):
+    return tweet[key]
+ 
+### Import des données et pré-traitement
+########################################
 
 tweets_data_path = 'twitter_data.txt'
 
@@ -40,12 +43,16 @@ for line in tweets_file:
     
 print('Nombre de tweets : '+str(len(tweets_data)))
 
+for tweet in tweets_data:
+    if 'text' not in tweet.keys():
+        tweets_data.remove(tweet)
+        
+print('Nombre de tweets : '+str(len(tweets_data)))
 ### Traitement des données
 ##########################
 
 tweets = pd.DataFrame()
-
-tweets['text'] = list(map(lambda tweet: tweet['text'], tweets_data))
+tweets['text'] = list(map(lambda tweet: tweet['text'].lower(), tweets_data))
 tweets['lang'] = list(map(lambda tweet: tweet['lang'], tweets_data))
 tweets['country'] = list(map(lambda tweet: tweet['place']['country'] if tweet['place'] != None else None, tweets_data))
 
@@ -69,25 +76,15 @@ ax.set_ylabel('Number of tweets' , fontsize=15)
 ax.set_title('Top 5 countries', fontsize=15, fontweight='bold')
 tweets_by_country[:5].plot(ax=ax, kind='bar', color='blue')
 
-# Nettoyage et extraction des tweets en français et en anglais
+# Extraction des tweets en anglais et séparation Wenger/Mourinho
 
 english_tweets = tweets[tweets.lang=='en'].drop_duplicates()
-french_tweets = tweets[tweets.lang=='fr'].drop_duplicates()
-english_tweets.to_csv('tweets_en.csv',sep=';',header=True,decimal='.',encoding='utf-8',index=False) 
-french_tweets.to_csv('tweets_fr.csv',sep=';',header=True,decimal='.',encoding='utf-8',index=False) 
+wenger = pd.DataFrame()
+mourinho = pd.DataFrame()
+wenger['text'] = [tweet for tweet in english_tweets.text if 'wenger' in tweet]
+mourinho['text'] = [tweet for tweet in english_tweets.text if 'mourinho' in tweet]
 
+print("{} tweets sur José Mourinho contre {} pour Arsène Wenger".format(len(mourinho),len(wenger)))
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+wenger.to_csv('wenger.csv',sep=';',header=True,decimal='.',encoding='utf-8',index=False) 
+mourinho.to_csv('mourinho.csv',sep=';',header=True,decimal='.',encoding='utf-8',index=False)

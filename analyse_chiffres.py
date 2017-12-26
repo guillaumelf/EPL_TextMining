@@ -48,11 +48,12 @@ for tweet in tweets_data:
         tweets_data.remove(tweet)
         
 print('Nombre de tweets : '+str(len(tweets_data)))
+
 ### Traitement des données
 ##########################
 
 tweets = pd.DataFrame()
-tweets['text'] = list(map(lambda tweet: tweet['text'].lower(), tweets_data))
+tweets['text'] = list(map(lambda tweet: re.sub(r"http\S+", "", tweet['text']), tweets_data))
 tweets['lang'] = list(map(lambda tweet: tweet['lang'], tweets_data))
 tweets['country'] = list(map(lambda tweet: tweet['place']['country'] if tweet['place'] != None else None, tweets_data))
 
@@ -81,8 +82,8 @@ tweets_by_country[:5].plot(ax=ax, kind='bar', color='blue')
 english_tweets = tweets[tweets.lang=='en'].drop_duplicates()
 wenger = pd.DataFrame()
 mourinho = pd.DataFrame()
-wenger['text'] = [tweet for tweet in english_tweets.text if 'wenger' in tweet]
-mourinho['text'] = [tweet for tweet in english_tweets.text if 'mourinho' in tweet]
+wenger['text'] = [tweet for tweet in english_tweets.text if 'wenger' in tweet.lower()]
+mourinho['text'] = [tweet for tweet in english_tweets.text if 'mourinho' in tweet.lower()]
 
 print("{} tweets sur José Mourinho contre {} pour Arsène Wenger".format(len(mourinho),len(wenger)))
 

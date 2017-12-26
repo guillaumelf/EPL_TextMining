@@ -35,6 +35,7 @@ Pour chacune de ces chaînes de caractères :
 -Calcul d'un score de popularité pour chaque manager et comparaison : qui est le plus populaire ? => http://www.nltk.org/howto/sentiment.html
 -Classification des tweets : positifs et négatifs. Dans un deuxième temps : extraction des reproches et louanges pour chacun
 => nuage de mots
+-Extraction des adjectifs à partir d'un etiquettage grammatical puis représentation d'un nuage de mots
 
 ## Rédaction du rapport et du bilan => A faire !
 

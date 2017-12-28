@@ -16,6 +16,7 @@ from nltk.stem import WordNetLemmatizer
 from nltk.util import ngrams
 import pandas as pd
 import re
+from concurrent.futures import ThreadPoolExecutor
 
 ### Définition locale de fonctions
 ##################################
@@ -30,6 +31,19 @@ def tokenize_stopwords(texte):
             lst.append(m.lower())
     return lst   
 
+list_allowed = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','£','0','1','2','3','4','5','6','7','8','9','10']
+def remove_useless(word):
+    useful = 0
+    letters = list(word)
+    for elem in list_allowed :
+        if elem in letters :
+            useful +=1
+    if useful == 0 :
+        new_word = 'useless'
+    else :
+        new_word = word
+    return new_word
+                  
 ### Import des données et pré-traitement
 ########################################
 
@@ -56,9 +70,11 @@ paragraph_mourinho = ' '.join(map(lambda tweet : ' '.join(tweet),list(map(lambda
 
 tokenizer_mots = RegexpTokenizer('[\s+\'\.\,\?\!();\:\"\[\]\|\&]',gaps=True)
 stop_words = set(stopwords.words())
-
-wenger_words = tokenize_stopwords(paragraph_wenger)
-mourinho_words = tokenize_stopwords(paragraph_mourinho)
+e = ThreadPoolExecutor()
+wenger_words = e.map(remove_useless,tokenize_stopwords(paragraph_wenger))
+wenger_words = [word for word in wenger_words if word != 'useless']
+mourinho_words = e.map(remove_useless,tokenize_stopwords(paragraph_mourinho))
+mourinho_words = [word for word in mourinho_words if word != 'useless']
 
 # Premier calcul de fréquences 
 
@@ -67,12 +83,13 @@ most_common = fdist.most_common(100)
 for i in range(len(most_common)):
     if most_common[i][1] > 1:
         print(most_common[i])
-
+print('#################################################')
 fdist = FreqDist(word.lower() for word in mourinho_words)
 most_common = fdist.most_common(100)
 for i in range(len(most_common)):
     if most_common[i][1] > 1:
         print(most_common[i])
+print('#################################################')
 
 # Racinisation
 
@@ -93,7 +110,7 @@ most_common = fdist.most_common(100)
 for i in range(len(most_common)):
     if most_common[i][1] > 1:
         print(most_common[i])
-
+print('#################################################')
 fdist = FreqDist(word.lower() for word in lemme_mourinho)
 most_common = fdist.most_common(100)
 for i in range(len(most_common)):

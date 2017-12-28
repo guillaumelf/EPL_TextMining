@@ -11,7 +11,7 @@
 -Nettoyage des tweets (on enlève les doublons)
 -Séparation des tweets qui concernent Wenger et Mourinho, puis écriture dans deux fichiers csv
 
-## Pré-traitement ==> En cours
+## Pré-traitement ==> Ok !
 
 Voir le TD5 avec NLTK et N-grams pour les tâches à réaliser :
 
@@ -23,7 +23,7 @@ Pour chacune de ces chaînes de caractères :
 -Racinisation (from nltk.stem.porter import PorterStemmer) => Fait !
 -Lemmatisation (from nltk.stem import WordNetLemmatizer) => Fait !
 -Calcul des fréquences (nltk.FreqDist) => Fait !
--N-grams (from nltk.util import ngrams) => A faire !
+-N-grams (from nltk.util import ngrams) => Fait !
 
 ## Représentations textuelles ==> A faire !
 

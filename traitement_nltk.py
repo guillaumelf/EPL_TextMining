@@ -13,7 +13,6 @@ from nltk.corpus import stopwords
 from nltk.probability import FreqDist
 from nltk.stem.porter import PorterStemmer
 from nltk.stem import WordNetLemmatizer
-from nltk.util import ngrams
 import pandas as pd
 import re
 from concurrent.futures import ThreadPoolExecutor
@@ -55,10 +54,13 @@ mourinho = list(pd.read_csv('mourinho.csv',sep=';',header=0,decimal='.',encoding
 regex = re.compile(r'[\n\r\t]')
 wenger = [re.sub(r"RT @(.*?):",r"",tweet) for tweet in wenger]
 wenger = [re.sub(r"RT",r"",tweet) for tweet in wenger]
+wenger = [re.sub(r"è",r"e",tweet) for tweet in wenger]
 wenger = [regex.sub('',tweet) for tweet in wenger]
 mourinho = [re.sub(r"RT @(.*?):",r"",tweet) for tweet in mourinho]
 mourinho = [re.sub(r"RT",r"",tweet) for tweet in mourinho]
+mourinho = [re.sub(r"é",r"e",tweet) for tweet in mourinho]
 mourinho = [regex.sub('',tweet) for tweet in mourinho]
+
 
 # Tokenisation 1ere étape : on enlève les noms d'utilisateurs et autres @ et on regroupe en un seul paragraphe
 
@@ -72,23 +74,29 @@ tokenizer_mots = RegexpTokenizer('[\s+\'\.\,\?\!();\:\"\[\]\|\&]',gaps=True)
 stop_words = set(stopwords.words())
 e = ThreadPoolExecutor()
 wenger_words = e.map(remove_useless,tokenize_stopwords(paragraph_wenger))
-wenger_words = [word for word in wenger_words if word != 'useless']
+wenger_words = [word for word in wenger_words if word != 'useless'] #Supression des caractères non-éliminés par la regex
 mourinho_words = e.map(remove_useless,tokenize_stopwords(paragraph_mourinho))
 mourinho_words = [word for word in mourinho_words if word != 'useless']
 
-# Premier calcul de fréquences 
+# Premier calcul de fréquences  : affichage à l'écran + écriture dans un fichier
 
+file = open('wenger_words.txt','w')
 fdist = FreqDist(word.lower() for word in wenger_words)
 most_common = fdist.most_common(100)
 for i in range(len(most_common)):
     if most_common[i][1] > 1:
         print(most_common[i])
+        file.write("{}:{}\n".format(most_common[i][0],most_common[i][1]))
+file.close()
 print('#################################################')
+file = open('mourinho_words.txt','w')
 fdist = FreqDist(word.lower() for word in mourinho_words)
 most_common = fdist.most_common(100)
 for i in range(len(most_common)):
     if most_common[i][1] > 1:
         print(most_common[i])
+        file.write("{}:{}\n".format(most_common[i][0],most_common[i][1]))
+file.close()
 print('#################################################')
 
 # Racinisation
@@ -105,14 +113,20 @@ lemme_mourinho = list(map(lambda word : lemmatizer.lemmatize(word,pos="v"),stem_
 
 # Second calcul de fréquences 
 
+file = open('wenger_stems.txt','w')
 fdist = FreqDist(word.lower() for word in lemme_wenger)
 most_common = fdist.most_common(100)
 for i in range(len(most_common)):
     if most_common[i][1] > 1:
         print(most_common[i])
+        file.write("{}:{}\n".format(most_common[i][0],most_common[i][1]))
+file.close()
 print('#################################################')
+file = open('mourinho_stems.txt','w')
 fdist = FreqDist(word.lower() for word in lemme_mourinho)
 most_common = fdist.most_common(100)
 for i in range(len(most_common)):
     if most_common[i][1] > 1:
         print(most_common[i])
+        file.write("{}:{}\n".format(most_common[i][0],most_common[i][1]))
+file.close()

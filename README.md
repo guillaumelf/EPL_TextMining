@@ -8,4 +8,4 @@ If you love football and watch the English Premier League on a regular basis, yo
 
 To perform this, we will use several modules from the **python** library *NLTK*
 
-**Note :** the *twitter_data.txt* file was too voluminous, hence couldn't be uploaded on GitHub, so you won't be able to perform the very first steps of the analysis in scripts *data_concat.py* and *analyse_chiffres.py*, but it's not the central point of this project as it only consists in cleaning the data and building the dataframes filled with the tweets that are of interest to us. You can still check how it works though.
+**Note :** the *twitter_data.txt* file was too voluminous, hence couldn't be uploaded on GitHub, so you won't be able to perform the very first steps of the analysis in scripts *data_concat.py* and *analyse_chiffres.py*, but it's not the central point of this project as it only consists in cleaning the data and building the dataframes filled with the tweets that were of interest to us. You can still check how it works though.

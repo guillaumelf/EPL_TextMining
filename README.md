@@ -1,10 +1,10 @@
-# twitter_textmining
+# Performing Text Mining on Twitter with python
 
 This is a quick introduction about scraping tweets with **python** library *tweepy* (v. 3.3.0) to perform some Text Mining methods on the subsequent data
 
 ## Wenger vs Mourinho
 
-If you love football and watch the English Premier League on a regular basis, you must surely know that the rivalry between Arsène Wenger & José Mourinho is second to known. The target of this study will be to extract tweets about either manager and try to discover from this sample the popularity of both. We will analyse what people like about them, and what they don't.
+If you love football and watch the English Premier League on a regular basis, you must surely know that the rivalry between Arsène Wenger & José Mourinho is second to known. The target of this study will be to extract tweets about either manager and try to discover from this sample the popularity of both. We will analyse what people like about them, and what they don't. So the main topic here is sentiment analysis.
 
 To perform this, we will use several modules from the **python** library *NLTK*
 

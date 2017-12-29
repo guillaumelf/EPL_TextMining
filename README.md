@@ -1,6 +1,6 @@
 # Performing Text Mining on Twitter with python
 
-This is a quick introduction about scraping tweets with **python** library *tweepy* (v. 3.3.0) to perform some Text Mining methods on the subsequent data
+This is a quick introduction about scraping tweets with **python** library *tweepy* (v. 3.3.0) to perform some Text Mining methods on the subsequent data.
 
 ## Wenger vs Mourinho
 

@@ -55,11 +55,11 @@ regex = re.compile(r'[\n\r\t]')
 wenger = [re.sub(r"RT @(.*?):",r"",tweet) for tweet in wenger]
 wenger = [re.sub(r"RT",r"",tweet) for tweet in wenger]
 wenger = [re.sub(r"è",r"e",tweet) for tweet in wenger]
-wenger = [regex.sub('',tweet) for tweet in wenger]
+wenger = [regex.sub(' ',tweet) for tweet in wenger]
 mourinho = [re.sub(r"RT @(.*?):",r"",tweet) for tweet in mourinho]
 mourinho = [re.sub(r"RT",r"",tweet) for tweet in mourinho]
 mourinho = [re.sub(r"é",r"e",tweet) for tweet in mourinho]
-mourinho = [regex.sub('',tweet) for tweet in mourinho]
+mourinho = [regex.sub(' ',tweet) for tweet in mourinho]
 
 
 # Tokenisation 1ere étape : on enlève les noms d'utilisateurs et autres @ et on regroupe en un seul paragraphe

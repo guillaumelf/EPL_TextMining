@@ -43,6 +43,8 @@ for line in tweets_file:
     
 print('Nombre de tweets : '+str(len(tweets_data)))
 
+# On enlève les tweets n'ayant pas de texte
+
 for tweet in tweets_data:
     if 'text' not in tweet.keys():
         tweets_data.remove(tweet)
@@ -53,7 +55,7 @@ print('Nombre de tweets : '+str(len(tweets_data)))
 ##########################
 
 tweets = pd.DataFrame()
-tweets['text'] = list(map(lambda tweet: re.sub(r"http\S+", "", tweet['text']), tweets_data))
+tweets['text'] = list(map(lambda tweet: re.sub(r"http\S+", "", tweet['text']) if not tweet['text'].startswith('RT') else 'None', tweets_data))
 tweets['lang'] = list(map(lambda tweet: tweet['lang'], tweets_data))
 tweets['country'] = list(map(lambda tweet: tweet['place']['country'] if tweet['place'] != None else None, tweets_data))
 

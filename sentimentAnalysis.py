@@ -6,6 +6,19 @@ Created on Sat Dec 30 10:14:51 2017
 """
 
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
+import pandas as pd
+from nltk.tokenize import TweetTokenizer
+import re
+from concurrent.futures import ThreadPoolExecutor
+import numpy as np
+
+### Définition locale de fonctions
+##################################
+
+def get_score(tweet):
+    ss = sid.polarity_scores(tweet)
+    score = ss['compound']
+    return score
 
 # Quelques exemples
 
@@ -17,3 +30,35 @@ for sentence in sentences:
     for k in sorted(ss):
         print('{0}: {1}, '.format(k, ss[k]), end='')
         print()
+print('###########################################')
+
+#####################################################################################################        
+########################### Application sur nos tweets ##############################################
+#####################################################################################################
+
+e = ThreadPoolExecutor()
+wenger = list(pd.read_csv('wenger.csv',sep=';',header=0,decimal='.',encoding='utf-8').text)
+mourinho = list(pd.read_csv('mourinho.csv',sep=';',header=0,decimal='.',encoding='utf-8').text)
+
+# On enlève les "RT @blablabla:" à l'aide d'une expression régulière ainsi que les '\n'
+
+regex = re.compile(r'[\n\r\t]')
+wenger = [re.sub(r"RT @(.*?):",r"",tweet) for tweet in wenger]
+wenger = [re.sub(r"RT",r"",tweet) for tweet in wenger]
+wenger = [regex.sub(' ',tweet) for tweet in wenger]
+mourinho = [re.sub(r"RT @(.*?):",r"",tweet) for tweet in mourinho]
+mourinho = [re.sub(r"RT",r"",tweet) for tweet in mourinho]
+mourinho = [regex.sub(' ',tweet) for tweet in mourinho]
+
+# Tokenisation 1ere étape : on enlève les noms d'utilisateurs et autres @ et on regroupe en un seul paragraphe
+
+tokenizer = TweetTokenizer(strip_handles=True, reduce_len=True)
+wenger_tweets = list(map(lambda tweet : ' '.join(tokenizer.tokenize(tweet)),wenger))
+mourinho_tweets = list(map(lambda tweet : ' '.join(tokenizer.tokenize(tweet)),mourinho))
+
+# Extraction des scores de chaque tweet
+
+scores_wenger = list(e.map(get_score,wenger_tweets))
+scores_mourinho = list(e.map(get_score,mourinho_tweets))
+print('Score moyen (écart type) pour Wenger : %.4f (%.4f)' % (np.mean(scores_wenger),np.std(scores_wenger)))
+print('Score moyen (écart type) pour Mourinho : %.4f (%.4f)' % (np.mean(scores_mourinho),np.std(scores_mourinho)))

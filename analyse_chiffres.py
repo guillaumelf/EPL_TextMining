@@ -33,13 +33,14 @@ def extract_key(tweet,key):
 tweets_data_path = 'twitter_data.txt'
 
 tweets_data = []
-tweets_file = open(tweets_data_path, "r")
-for line in tweets_file:
-    try:
-        tweet = json.loads(line)
-        tweets_data.append(tweet)
-    except:
-        continue
+with open(tweets_data_path, "r") as tweets_file :
+    for line in tweets_file :
+        try:
+            tweets = json.loads(line)
+            for tweet in tweets:
+                tweets_data.append(tweet)
+        except:
+            continue
     
 print('Nombre de tweets : '+str(len(tweets_data)))
 

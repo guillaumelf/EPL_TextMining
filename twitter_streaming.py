@@ -10,6 +10,7 @@ from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
 
+#Don't forget to put your own keys... !
 consumer_key = 'MY-CONSUMER-KEY'
 consumer_secret = 'My-CONSUMER-SECRET'
 access_token = 'MY-ACCESS-TOKEN'

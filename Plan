@@ -27,19 +27,19 @@ Pour chacune de ces chaînes de caractères :
 
 ## Représentations textuelles ==> A faire !
 
--Nuage de mots (outil wordle.net) pour chaque manager
--Nuage de N-grams pour chaque manager
+-Nuage de mots (outil wordle.net) pour chaque manager ?
+-Nuage de N-grams pour chaque manager ?
 
 ## Analyse plus poussée ==> En cours !
 
 -Calcul d'un score de popularité pour chaque manager et comparaison : qui est le plus populaire ? => Fait !
 -Classification des tweets : positifs et négatifs. Dans un deuxième temps : extraction des reproches et louanges pour chacun => A faire !
 => nuage de mots
--Extraction des adjectifs à partir d'un etiquettage grammatical puis représentation d'un nuage de mots => A faire !
+-Extraction des adjectifs à partir d'un etiquettage grammatical puis représentation d'un nuage de mots (from nltk.tag import pos_tag) => A faire !
 
 ## Focus sur les Hashtags ==> A faire !
 
--Extraire seulement les Hashtags pour chaque manager et essayer de dégager une tendance 
+-Extraire seulement les Hashtags pour chaque manager et essayer de dégager des tendances
 
 ## Rédaction du rapport et du bilan => A faire !
 

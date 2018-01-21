@@ -5,11 +5,6 @@ Created on Tue Jan 16 11:22:53 2018
 @author: Pierre
 """
 
-"""
-Created on Tue Dec 26 14:23:47 2017
-@author: Guillaume
-"""
-
 ### Import de librairies
 ########################
 
@@ -18,13 +13,16 @@ import pandas as pd
 import re
 from nltk.probability import FreqDist
 
+### Définition locale de fonctions
+##################################
+
+def extract_hashtag(tweet):
+    word_list=tweet.split(' ')
+    hashtag = [word for word in word_list if word.startswith('#')]
+    return hashtag
+
 ### Import des données et pré-traitement
 ########################################
-
-def getTokens(doc):
-    regex = r"""\w+"""
-    tokens = [word.strip().lower() for word in re.findall(regex, doc)]
-    return tokens
     
 wenger = list(pd.read_csv('wenger.csv',sep=';',header=0,decimal='.',encoding='utf-8').text)
 mourinho = list(pd.read_csv('mourinho.csv',sep=';',header=0,decimal='.',encoding='utf-8').text)
@@ -41,13 +39,12 @@ mourinho = [re.sub(r"RT",r"",tweet) for tweet in mourinho]
 mourinho = [re.sub(r"é",r"e",tweet) for tweet in mourinho]
 mourinho = [regex.sub(' ',tweet) for tweet in mourinho]
 
+# On procède à un premier tri : on ne garde que les tweets contenant des hashtags
+
 hashtag_wenger = [tweet for tweet in wenger if '#' in list(tweet)]
 hashtag_mourinho = [tweet for tweet in mourinho if '#' in list(tweet)]
 
-def extract_hashtag(tweet):
-    word_list=tweet.split(' ')
-    hashtag = [word for word in word_list if word.startswith('#')]
-    return hashtag
+# Puis pour chaque manager on extrait les hashatags les concernant
 
 wenger_h = list(map(lambda tweet: extract_hashtag(tweet), hashtag_wenger))
 mourinho_h = list(map(lambda tweet: extract_hashtag(tweet), hashtag_mourinho))
@@ -65,7 +62,7 @@ for i in range(len(most_common)):
         print(most_common[i])
         file.write("{}:{}\n".format(most_common[i][0],most_common[i][1]))
 file.close()
-
+print('###################################')
 hash_m=[]
 for elem in mourinho_h:
     for el in elem:

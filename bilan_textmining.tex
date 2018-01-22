@@ -86,7 +86,7 @@ Cette problématique est assez large, et pour cette raison, notre étude va s'ar
 \begin{itemize}
 \item Une analyse préliminaire des données afin de procéder à une sélection de tweets pertinents
 \item Une analyse globale des tweets concernant chaque manager, afin de résumer les opinions
-\item Une analyse plus détaillée pour tenter d'extraire de vraies tendances aux niveau des \textbf{hashtags} et de la valeur sentimentale des tweets
+\item Une analyse plus détaillée pour tenter d'extraire de vraies tendances aux niveau des \textbf{hashtags} et de la \textbf{valeur sentimentale} des tweets
 \end{itemize}
 \newpage
 \section{La récupération des données}
@@ -108,17 +108,18 @@ Dans notre étude, nous allons nous servir principalement de la clé 'text' qui 
 \paragraph{}
 Extraire tous les tweets qui contiennent une chaîne de caractère donnée n'est pas compliqué, en revanche on peut se douter à l'avance que tout ne sera pas pertinent et que l'on va rencontrer certains problèmes. C'est pour cette raison qu'il nous fallait une base conséquente au départ, car elle va se retrouver largement affinée par la suite.
 \paragraph{}
-Un problème que nous n'avons pas eu, mais que nous aurions pu rencontrer concerne les différents sens du mot cible qui nous sert à effectuer l'extraction des tweets. Par exemple, si nous avions voulu nous pencher sur le cas de l'actuel manager de Chelsea, \textbf{Antonio Conte} et que nous avions seulement utilisé le mot clé \og conte \fg{} pour y faire référence, nous nous serions retrouvés avec des tweets parlant de personnes d'origine africaine portant le même nom, ou bien encore par exemple d'un \og conte de Noël \fg{}. Et si vous renseignez \og antonio conte \fg{} (l'API ne tient pas compte de la casse) vous ne pourrez extraire que les tweets contenant la chaîne complète, ce qui réduira donc largement le champs des tweets accessibles.\\
+Un problème que nous n'avons pas eu, mais que nous aurions pu rencontrer concerne les différents sens du mot cible qui nous sert à effectuer l'extraction des tweets. Par exemple, si nous avions voulu nous pencher sur le cas de l'actuel manager de Chelsea, \textbf{Antonio Conte} et que nous avions seulement utilisé le mot clé \og conte \fg{} pour y faire référence, nous nous serions retrouvés avec des tweets parlant de personnes d'origine africaine portant le même nom, ou bien encore par exemple d'un \og conte de Noël \fg{}. Et si vous renseignez \og antonio conte \fg{} (l'API ne tient pas compte de la casse) vous ne pourrez extraire que les tweets contenant la chaîne complète, ce qui réduira donc largement le champs des tweets accessibles.
+\paragraph{}
 En ce qui nous concerne, il n'existe pas d'ambiguïté sur Mourinho et Wenger, ce sont des noms propres et aucune autre personnalité ne porte le même. En revanche, lorsque les fans ou journalistes parlent d'eux ils utilisent parfois \og Mou \fg{} ou \og José \fg{} pour parler de Mourinho et \og AW \fg{}, \og the Boss \fg{} ou encore \og Big Wengz \fg{} concernant Arsène Wenger. Nous n'avons donc pas pu capter tout ce qui se disait sur eux.
 \paragraph{}
-Néanmoins, nous avons réussi à extraire un total de \textbf{304 512} tweets. Un premier nettoyage a consisté à enlever les tweets pour lesquels il n'y avait pas de texte (ce qui correspond à une liste vide associée à la clé 'text' dans le dictionnaire python). En effet, un autre problème lié à la fouille de texte est que l'on ne peut pas exploiter les images, les GIFs ou encore les vidéos qui sont pourtant très porteuses de sens. Après avoir procédé à cette opération, il nous reste tout de même \textbf{304 488} tweets.
+Néanmoins, nous avons réussi à extraire un total de \textbf{304 512} tweets. Un premier nettoyage a consisté à enlever les tweets pour lesquels il n'y avait pas de texte (ce qui correspond à une liste vide associée à la clé 'text' dans le dictionnaire python). En effet, un autre problème lié à la fouille de texte est que l'on ne peut pas exploiter les images, les GIFs ou encore les vidéos qui sont pourtant très porteurs de sens. Après avoir procédé à cette opération, il nous reste tout de même \textbf{304 488} tweets.
 \paragraph{}
-Un autre problème que l'on peut rencontrer avec les tweets est la présence de \textbf{doublons} ou de tweets qui sont quasiment des doublons. Cela concerne les fameux \textbf{retweets} : quand une personne va retweeter un tweet, cela va apparaitre sous la forme \og RT : blablabla \fg{}. Pour régler ce problème, nous avons donc décidé de supprimer tous les tweets commençant par \og RT \fg{}.\\
+Un autre problème que l'on peut rencontrer avec les tweets est la présence de \textbf{doublons} ou de tweets qui sont quasiment des doublons. Cela concerne les fameux \textbf{retweets} : quand une personne va retweeter un tweet, cela va apparaitre sous la forme \og RT : blablabla \fg{}. Pour régler ce problème, nous avons donc décidé de supprimer tous les tweets commençant par \og RT \fg{}, on ne garde ainsi que le tweet original.\\
 Le problème des \og quasi-doublons \fg{} était quant à lui dû aux liens (vers un article de presse par exemple) : on retrouve à chaque fois le même contenu textuel, mais puisque le lien est différent, la méthode \textit{drop\_duplicates()} de la librairie \textbf{Pandas} en Python ne détecte pas le doublon. La solution que nous avons choisie consiste tout simplement à supprimer au préalable tous les liens dans les tweets à l'aide d'une expression régulière.
 \paragraph{}
 Un autre aspect à prendre en compte est la langue dans laquelle est écrit le tweet. En effet, Arsenal et Manchester United sont des clubs de football suivis dans le monde entier, des fans de tous les pays tweetent à propos de ces 2 entités et de leurs managers. Nous avons donc décidé de regarder un \textit{Top 5} des langues dans lesquels nos tweets sont écrits.\\
 \begin{center}
-\includegraphics[scale=0.85]{Images/top5.jpg}
+\includegraphics[scale=0.8]{Images/top5.jpg}
 \end{center}
 \paragraph{}
 Les résultats sont sans appel, une écrasante majorité des tweets sont rédigés en anglais, ce qui n'est pas surprenant puisque la Premier League est beaucoup suivie au Royaume-Uni, en Amérique du Nord, en Inde et au Nigeria. Le français représente la deuxième langue, probablement grâce à Arsène Wenger et à la communauté francophone d'Arsenal. Cependant la quantité de tweets est insuffisante, puisque les doublons n'ont pas encore été enlevés. Nous allons donc conserver uniquement les tweets en anglais.
@@ -131,5 +132,11 @@ Après avoir effectué ces différentes opérations, nous allons stocker les twe
 \section{Bilan}
 
 \section{Sources}
-
+\begin{flushleft}
+- \textbf{Réglementation de Twitter}, \href{https://developer.twitter.com/en/developer-terms/agreement-and-policy}{\textit{\textcolor{blue}{https://developer.twitter.com/en/developer-terms/agreement-and-policy}}}\\
+\medskip
+- \textbf{Scraping de tweets}, \href{https://marcobonzanini.com/2015/03/02/mining-twitter-data-with-python-part-1/}{\textit{\textcolor{blue}{https://marcobonzanini.com/2015/03/02/mining-twitter-data-with-python-part-1/}}}\\
+\medskip
+- \textbf{Analyse de sentiment}, \href{http://www.nltk.org/howto/sentiment.html}{\textit{\textcolor{blue}{http://www.nltk.org/howto/sentiment.html}}}\\
+\end{flushleft}
 \end{document}

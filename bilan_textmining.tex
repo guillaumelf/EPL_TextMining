@@ -126,7 +126,54 @@ Les résultats sont sans appel, une écrasante majorité des tweets sont rédig�
 \paragraph{}
 Après avoir effectué ces différentes opérations, nous allons stocker les tweets concernant José Mourinho dans un dataframe \textit{mourinho.csv}, idem pour Arsène Wenger (\textit{wenger.csv}). Au final, nous avons 26087 tweets pour José Mourinho et 28244 tweets pour Arsène Wenger, à analyser.
 \section{Traitement global des tweets}
+\paragraph{}
+Lorsqu'on parle de traitement global des tweets (par opposition au traitement détaillé que l'on verra par la suite), nous faisons référence à une première approche assez basique qui consiste à regarder la fréquence des mots dans notre corpus. Pour ce faire, nous avons utilisé les modules de la librairie Python \textbf{NLTK} (Natural Language ToolKit). Le code est disponible dans le script \textit{traitement\_nltk.py}). Le but est de regarder les mots les plus fréquents afin d'obtenir un premier résumé des tweets concernant chaque manager, pour créer un \textbf{nuage de mots} à l'aide de l'outil \href{http://www.wordle.net/}{\textit{\textcolor{blue}{wordle.net}}}. Nous trouvons que cette représentation est visuelle et permet d'obtenir une première tendance en ce qui concerne les thèmes liés à nos protagonistes. Pour parvenir à une représentation \og propre \fg{}, il faut effectuer quelques traitements au préalable :
+\begin{itemize}
+\item Enlever les \og RT \fg{} dans les tweets car ils ne nous sont d'aucune utilité 
+\item Enlever les noms d'utilisateurs (qui sont précédés d'un \og @ \fg{}) car nous jugeons qu'ils pourraient polluer l'analyse
+\item Enlever tous les éléments de la ponctuation et les accents à l'aide d'expressions régulières
+\item Enlever les mots vides et en ajouter certains qui ne figurent pas dans la liste implémentée par le module \textit{nltk}, puis enlever les hashtags puisqu'ils seront traités séparément à la fin de cette étude
+\item Supprimer des caractères \og parasites \fg{} propres à l'extraction des tweets et que les expressions régulières n'ont pas pu enlever comme '...' ou encore les emojis : pour cela nous avons implémenté la fonction \textbf{remove\_useless} qui ne conserve que les chaînes de caractères contenant seulement des chiffres, des lettres et/ou des symboles monétaires (qui ont leur importance dans notre analyse)
+\item Regrouper tous les mots en un seul paragraphe (un pour chaque manager) afin de former notre propre corpus
+\item Enlever les mots \og wenger \fg{} et \og mourinho \fg{} qui vont être les plus représentés, puisque leur fréquence sera supérieure ou égale au nombre de tweets, car ils risquent d'écraser les autres mots
+\end{itemize}
+\paragraph{}
+Une fois ce travail effectué, on peut se pencher sur l'analyse des corpus \og propres \fg{} que nous avons formé.
+\subsection{Une analyse simple de la fréquence des mots}
+\paragraph{}
+Ce qui ressort de cette première analyse s'est retrouvé assez influencé par la période de scraping des tweets. Il est donc logique de trouver dans nos résultats le nom des adversaires d'Arsenal et de Manchester United, ainsi que les noms de certains joueurs ayant fait l'actualité dans ces matchs. A côté de ces aspects, on notera tout de même certain points intéressants que nous allons détailler tout de suite avec les nuages de mots.
+\paragraph{}
+En ce qui concerne Arsène Wenger, le résultat visuel est à la page suivante.
+\begin{center}
+\includegraphics[scale=0.6]{Images/wenger_words.png}
+\end{center}
+Arsenal a affronté Liverpool, Chelsea et Crystal Palace, on retrouve donc les noms de tous ces clubs ainsi que les noms des managers rivaux de Liverpool (Klopp) et Chelsea (Conte). Au niveau des joueurs, \textbf{Alex Oxlade-Chamberlain} qui a joué sous les couleurs d'Arsenal pendant 6 saisons et qui a été transféré à Liverpool l'été dernier a fait parler de lui pour son retour du côté de l'Emirates Stadium. Les autres joueurs associés à Arsène Wenger dans les tweets sont des joueurs d'Arsenal : Jack Wilshere, Alexis Sanchez et Alexandre Lacazette.\\
+Ensuite, on retrouve des termes tels que \og farcical \fg{}, \og decision \fg{}, \og penalty \fg{}, \og FA \fg{} ou encore \og charge \fg{}  qui font référence aux critique d'Arsène Wenger à l'encontre des arbitres et à la suspension qui lui a été infligée par la Fédération Anglaise.\\
+Il a également été question de Sir Alex Ferguson, l'illustre manager resté pendant 26 ans à la tête de Manchester United et rival en son temps d'Arsène Wenger. Le français a égalé son homologue écossais en terme de matchs en Premier League (810), durant notre période d'extraction des tweets.\\
+Enfin, on remarque la présence de termes comme \og needs \fg{}, \og go \fg{} qui peuvent suggérer des phrases du style \og Wenger needs to go \fg{}, lorsque les fans veulent qu'il s'en aille. Pour vérifier cela nous ferons par la suite une analyse de \textbf{bigrammes}, \textbf{trigrammes} et même \textbf{quadrigrammes} qui pourront peut-être apporter plus d'informations à ce niveau-là. Comme il est question également de la période des transferts (\og transfer \fg{}, \og january \fg{}) cela pourrait également concerner des joueurs.
+\paragraph{}
+Dernier point intéressant : il est question de José Mourinho, souvent lorsque les gens tweetent à propos de Wenger, ils tweetent en même temps à propos de Mourinho. Nous allons vérifier tout de suite si cela fonctionne également dans l'autre sens en se penchant sur le nuage de mots issu des tweets sur le manager portugais.
+\begin{center}
+\includegraphics[scale=0.6]{Images/mourinho_words.png}
+\end{center}
+On retrouve donc cette réciprocité puisque Wenger est dans le nuage de mots. Avant cela, on comprend bien que le sujet tourne autour de Manchester United et de son \og boss \fg{}. Il est également question des adversaires de United, à savoir Bristol City et Burnley. Les twittos ont également beaucoup comparé Mourinho à son plus grand rival ; Pep Guardiola le manager de Manchester City. Ils ont parlé de joueurs de United tels que Lukaku, Pogba, Ibrahimovic ou encore Lingard.\\
+Il est intéressant de noter la fréquence élevée d'apparition du symbole monétaire de la \textbf{livre sterling}, des termes \og spend \fg{}, \og money \fg{} et \og 300m \fg{}, quand on se rappelle de la réputation de \og chequebook manager \fg{} du technicien portugais. Il a en effet affirmé en conférence de presse après des comparaisons avec le Manchester city de Guardiola qui caracole en tête du classement que les 300 millions de pounds qu'il avait dépensé pour construire son équipe n'étaient pas encore suffisants. Les fans sur Twitter s'en sont donc donnés à cœur joie.\\
+On notera également qu'il était question de son ancien club de Chelsea, et du marché des transferts avec des mots tels que \og january \fg{}, \og buy \fg{}, \og sign \fg{}, ...\\
+Enfin, on note la présence de \og park \fg{} et \og bus \fg{}, qui font référence à cette fameuse tactique employée par l'équipe de José Mourinho pour défendre, et le mot \og sacked \fg{} qui signifie tout simplement \og limogé \fg{}. Serait-ce un signe de lassitude des supporters vis-à-vis de Mourinho ?
 
+\subsection{Une tentative d'amélioration}
+\paragraph{}
+Le premier traitement était \og brut \fg{}, dans le sens où nous avons regardé les mots tels quels. Une deuxième approche va consister à rajouter deux étapes supplémentaires en faisant une \textbf{racinisation} et une \textbf{lemmatisation} des mots. En effet, avant ces étapes on fait une distinction par exemple entre les mots \og wins \fg{} et \og win \fg{} tandis qu'ils désignent le même concept. De même avec \og spend \fg{} et \og spending \fg{}.\\
+En rajoutant ces étapes, on peut donc régler ces problèmes, mais on en apporte d'autres : certaines fois ce n'est pas pertinent car quand on racinise le mot \og league \fg{} par exemple il devient \og leagu \fg{}... Regardons donc ce que donnent ces traitements au niveau des résultats.
+\begin{center}
+\includegraphics[scale=0.6]{Images/wenger_stems.png}
+\medskip
+\includegraphics[scale=0.6]{Images/mourinho_stems.png}
+\end{center}
+La différence n'est pas flagrante, et dans notre analyse elle n'apporte rien de significatif et aurait même tendance à dégrader la qualité des résultats avant de procéder à une normalisation des mots. Nous allons donc nous pencher sur l'analyse des \textbf{ngrams} pour tenter d'enrichir l'analyse textuelle.
+\subsection{Complément d'analyse : les ngrams}
+\paragraph{}
+En ce qui concerne les ngrams, les traitements appliqués seront les mêmes que précédemment, à la différence près que l'on va conserver les hashtags ici (le code se trouve dans le script \textit{n\_grams.py}). On regarde la fréquence des ngrams, voici ce que l'on trouve pour Arsène Wenger
 \section{Traitement détaillé des tweets}
 
 \section{Bilan}
@@ -138,5 +185,7 @@ Après avoir effectué ces différentes opérations, nous allons stocker les twe
 - \textbf{Scraping de tweets}, \href{https://marcobonzanini.com/2015/03/02/mining-twitter-data-with-python-part-1/}{\textit{\textcolor{blue}{https://marcobonzanini.com/2015/03/02/mining-twitter-data-with-python-part-1/}}}\\
 \medskip
 - \textbf{Analyse de sentiment}, \href{http://www.nltk.org/howto/sentiment.html}{\textit{\textcolor{blue}{http://www.nltk.org/howto/sentiment.html}}}\\
+\medskip
+- \textbf{Elements des cours et des TP de Text Mining vus pendant le semestre} 
 \end{flushleft}
 \end{document}

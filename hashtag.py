@@ -8,7 +8,6 @@ Created on Tue Jan 16 11:22:53 2018
 ### Import de librairies
 ########################
 
-from nltk.tokenize import word_tokenize
 import pandas as pd
 import re
 from nltk.probability import FreqDist
@@ -52,7 +51,9 @@ mourinho_h = list(map(lambda tweet: extract_hashtag(tweet), hashtag_mourinho))
 hash_w=[]
 for elem in wenger_h:
     for el in elem:
-        hash_w.append(el.lower())
+        el = el.lower()
+        if ('ars' not in el) and ('afc' not in el) :
+            hash_w.append(el)
 
 file = open('hash_freq_w.txt','w')
 fdist = FreqDist(word.lower() for word in hash_w)
@@ -66,7 +67,9 @@ print('###################################')
 hash_m=[]
 for elem in mourinho_h:
     for el in elem:
-        hash_m.append(el.lower())
+        el = el.lower()
+        if ('mufc' not in el) and ('mun' not in el) :
+            hash_m.append(el)
         
 file = open('hash_freq_m.txt','w')
 fdist = FreqDist(word.lower() for word in hash_m)

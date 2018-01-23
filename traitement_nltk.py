@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 """
 Created on Tue Dec 26 14:23:47 2017
@@ -21,16 +22,11 @@ from concurrent.futures import ThreadPoolExecutor
 ##################################
 
 def tokenize_stopwords(texte):
-    lst = []
     mots = tokenizer_mots.tokenize(texte)
-    
-    # elimination des mots vides
-    for m in mots:
-        if m.lower() not in stop_words:
-            lst.append(m.lower())
+    lst = [m.lower() for m in mots if m.lower() not in stop_words and m.lower().startswith('#') == False] # elimination des mots vides et des hashtags
     return lst   
 
-list_allowed = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','£','0','1','2','3','4','5','6','7','8','9','10']
+list_allowed = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','£','€','0','1','2','3','4','5','6','7','8','9','10']
 def remove_useless(word):
     useful = 0
     letters = list(word)
@@ -72,7 +68,10 @@ paragraph_mourinho = ' '.join(map(lambda tweet : ' '.join(tweet),list(map(lambda
 
 tokenizer_mots = RegexpTokenizer('[\s+\'\.\,\?\!();\:\"\[\]\|\&]',gaps=True)
 stop_words = set(stopwords.words())
-e = ThreadPoolExecutor()
+new_words = ['like','must','us','got','even','still','via'] # ajout de mots à cette liste de mots vides
+for word in new_words :
+    stop_words.add(word) 
+e = ThreadPoolExecutor() # Utilisation de tous les coeurs de la machine pour baisser le temps de calcul
 wenger_words = e.map(remove_useless,tokenize_stopwords(paragraph_wenger))
 wenger_words = [word for word in wenger_words if word != 'useless'] #Supression des caractères non-éliminés par la regex
 mourinho_words = e.map(remove_useless,tokenize_stopwords(paragraph_mourinho))
@@ -82,7 +81,9 @@ mourinho_words = [word for word in mourinho_words if word != 'useless']
 
 file = open('wenger_words.txt','w')
 fdist = FreqDist(word.lower() for word in wenger_words)
-most_common = fdist.most_common(100)
+most_common = fdist.most_common(300)
+most_common.pop(0) # supression du nom et du prénom du manager
+most_common.pop(0)
 for i in range(len(most_common)):
     if most_common[i][1] > 1:
         print(most_common[i])
@@ -91,7 +92,9 @@ file.close()
 print('#################################################')
 file = open('mourinho_words.txt','w')
 fdist = FreqDist(word.lower() for word in mourinho_words)
-most_common = fdist.most_common(100)
+most_common = fdist.most_common(300)
+most_common.pop(0)
+most_common.pop(0)
 for i in range(len(most_common)):
     if most_common[i][1] > 1:
         print(most_common[i])
@@ -115,7 +118,9 @@ lemme_mourinho = list(map(lambda word : lemmatizer.lemmatize(word,pos="v"),stem_
 
 file = open('wenger_stems.txt','w')
 fdist = FreqDist(word.lower() for word in lemme_wenger)
-most_common = fdist.most_common(100)
+most_common = fdist.most_common(300)
+most_common.pop(0)
+most_common.pop(0)
 for i in range(len(most_common)):
     if most_common[i][1] > 1:
         print(most_common[i])
@@ -124,7 +129,9 @@ file.close()
 print('#################################################')
 file = open('mourinho_stems.txt','w')
 fdist = FreqDist(word.lower() for word in lemme_mourinho)
-most_common = fdist.most_common(100)
+most_common = fdist.most_common(300)
+most_common.pop(0)
+most_common.pop(0)
 for i in range(len(most_common)):
     if most_common[i][1] > 1:
         print(most_common[i])

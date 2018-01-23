@@ -104,7 +104,7 @@ tagged = list(map(lambda word : remove_useless(word),paragraph_mourinho.split(' 
 clean_words = [word for word in tagged if word != 'useless']
 txt_mourinho = ' '.join(clean_words)
 
-# Création des bigrams, trigrams et quadrigrams pour les deux managers
+# Création des bigrams, trigrams et quadrigrams pour les deux managers (on retient les 100 plus fréquents à chaque fois)
 
 build_ngrams_v2(txt_wenger,2,'wenger')
 build_ngrams_v2(txt_wenger,3,'wenger')

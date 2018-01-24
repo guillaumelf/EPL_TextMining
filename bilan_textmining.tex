@@ -87,6 +87,7 @@ Cette problématique est assez large, et pour cette raison, notre étude va s'ar
 \item Une analyse préliminaire des données afin de procéder à une sélection de tweets pertinents
 \item Une analyse globale des tweets concernant chaque manager, afin de résumer les opinions
 \item Une analyse plus détaillée pour tenter d'extraire de vraies tendances aux niveau des \textbf{hashtags} et de la \textbf{valeur sentimentale} des tweets
+\item Une confrontation directe entre Wenger et Mourinho en analysant les adjectifs utilisés pour les qualifier ainsi que les tweets dans lesquels les deux managers sont mentionnés
 \end{itemize}
 \newpage
 \section{La récupération des données}
@@ -173,8 +174,57 @@ En rajoutant ces étapes, on peut donc régler ces problèmes, mais on en apport
 La différence n'est pas flagrante, et dans notre analyse elle n'apporte rien de significatif et aurait même tendance à dégrader la qualité des résultats avant de procéder à une normalisation des mots. Nous allons donc nous pencher sur l'analyse des \textbf{ngrams} pour tenter d'enrichir l'analyse textuelle.
 \subsection{Complément d'analyse : les ngrams}
 \paragraph{}
-En ce qui concerne les ngrams, les traitements appliqués seront les mêmes que précédemment, à la différence près que l'on va conserver les hashtags ici (le code se trouve dans le script \textit{n\_grams.py}). On regarde la fréquence des ngrams, voici ce que l'on trouve pour Arsène Wenger
+En ce qui concerne les ngrams, les traitements appliqués seront les mêmes que précédemment, à la différence près que l'on va conserver les hashtags ici (le code se trouve dans le script \textit{n\_grams.py}). On regarde la fréquence des ngrams (bigrammes, trigrammes et quadrigrammes) en supprimant à la main les premiers qui ne sont pas pertinents et qui risqueraient d'écraser les autres, voici ce que l'on trouve pour Arsène Wenger.
+\begin{center}
+\includegraphics[scale=0.6]{Images/wenger_bigram.png}
+\includegraphics[scale=0.6]{Images/wenger_trigram.png}
+\includegraphics[scale=0.6]{Images/wenger_quadrigram.png}
+\end{center}
+\paragraph{}
+\paragraph{}
+Les résultats sont bien plus intéressants cette fois-ci, surtout quand on regarde les trigrammes et quadrigrammes qui apportent une information plus riche que la simple analyse de fréquence des mots.\\
+Même si certaines expressions viennent encore un peu \og polluer \fg{} l'analyse, on comprend qu'il est question principalement ici d'Arsène Wenger qui conteste les décisions des arbitres par rapport à des pénalty accordés aux adversaires. Cela provient très probablement de tweets écrits par des journalistes.\\
+Une autre tendance qui se dessine et qu'on ne voyait pas avec une simple analyse des fréquences de mots est l'\textbf{hostilité} des fans envers le manager : on trouve des \og f*ck off wenger \fg{}, \og wenger out \fg{} (qui signifie que des fans veulent son éviction) ou encore un sans appel \og wenger needs to go \fg{}. Le bilan ne se révèle donc pas très positif pour le manager français, comme on pouvait s'y attendre. Pour José Mourinho, les résultats obtenus se trouvent dans les pages suivantes.
+\begin{center}
+\includegraphics[scale=0.6]{Images/jose_bigram.png}
+\includegraphics[scale=0.6]{Images/mourinho_trigram.png}
+\includegraphics[scale=0.6]{Images/mourinho_quadrigram.png}
+\end{center}
+\paragraph{}
+Au regard des résultats, cela n'est pas plus encourageant pour Mourinho... A partir des quadrigrammes on comprend bien que sa déclaration en conférence de presse que 300 millions de pounds n'étaient pas suffisant, a fait l'actualité, ainsi que son attaque vis-à-vis de Manchester City le rival qui selon lui \og achète des arrières latéraux au prix des attaquants \fg{} (ce qui n'est pas faux...) et que United ne peut pas rivaliser. Cela a semble-t-il eu le don d'agacer les supporters, comme le montre le nuage des trigrammes : on retrouve parmi les plus fréquents \og f*ck off mourinho \fg{}, \og mourinho is finished \fg{}, \og mourinho could resign \fg{} ou encore \og mourinho could quit \fg{} ce qui indique clairement que le portugais n'est plus en odeur de sainteté.\\
+On retrouve également comme trigrammes fréquents \og style of play \fg{} et \og park the bus \fg{}, ce qui vient confirmer ce que nous avions exposé en introduction sur la réputation de José Mourinho par rapport au jeu que pratiquent ses équipes...
+
+\paragraph{}
+Nous remarquons donc que l'analyse des \textbf{ngrams} semble bien plus pertinente et permet de tirer quelques conclusions. Nous allons maintenant tenter d'aller encore plus loin dans l'\textbf{analyse de sentiments} et des \textbf{tendances}.
+\newpage
 \section{Traitement détaillé des tweets}
+\subsection{Analyse de sentiments}
+\paragraph{}
+Dans cette partie, notre but pour comparer les deux managers est de calculer un score de popularité. Nous allons pour cela utiliser un module particulier de la librairie \textbf{nltk} nommé \textbf{SentimentIntensityAnalyzer}. Quand on utilise ce module, la casse et la ponctuation sont importantes, pour cette raison nous laisserons la ponctuation et ne mettrons pas en minuscule les tweets. Tous les autres traitements effectués précédemment (enlerver les \og RT \fg{}, noms d'utilisateurs, emojis, etc) seront appliqués (le code correspondant se trouve dans le script \textit{sentimentAnalysis.py}). Commençons par un exemple visuel pour bien comprendre comment fonctionne ce module.
+\begin{center}
+\includegraphics[scale=0.8]{Images/senti_ana.png}
+\end{center}
+Ici on prend tout d'abord un exemple simple pour montrer la différence apportée à une même phrase par la casse et la ponctuation, puis nous prenons des exemples de tweets que nous avons jugés positifs et négatifs. Les résultats renvoyés par le module sont en accord avec ce que nous pensions et reflètent assez bien l'intensité (positive ou négative) des tweets (le score final correspond à \og compound \fg{}).
+\paragraph{}
+Notre base de tweets étant tout de même conséquente, on ne va pas pouvoir s'amuser à regarder le score de chaque tweet un à un. Cependant, pour tenter de résumer l'information nous avons décidé de calculer le score moyen de popularité (avec l'écart type associé) pour chaque manager et de représenter la distribution des scores à l'aide d'un histogramme. On rappelle que les scores sont distribués entre -1 et 1. Pour Wenger, le score moyen est de -0.0017 (écart type de 0.4196) et pour Mourinho on obtient 0.0482 (écart type de 0.4232). Infime avantage pour José Mourinho selon ces indicateurs, même si on voit que l'écart type est très élevé. En revanche, en ce qui concerne la distribution des scores, la donne est différente. On a plutôt l'impression que les sentiments à l'égard de Wenger sont positifs globalement et que c'est le contraire pour José Mourinho. Les représentations graphiques sont les suivantes.\\
+\includegraphics[scale=0.55]{Images/scoresWenger.jpg}
+\includegraphics[scale=0.55]{Images/scoresMourinho.jpg}
+Un des problèmes est que beaucoup de tweets sont écrits par des journalistes et vont être \og neutres \fg{}, et vont finalement polluer cette analyse. On va tout de même utiliser ces scores pour classer des tweets comme étant positifs si le score est supérieur à 0.25 et négatif s'il est inférieur à -0.25. Cela nous permet d'éliminer les tweets dits \og neutres \fg{}, et nous allons faire une analyse plus poussée de ces tweets dans la dernière partie sur la confrontation entre les deux managers.
+\subsection{Analyse des tendances : focus sur les hashtags}
+\paragraph{}
+Dans cette partie, on procède à l'extraction des hashtags seulement, dans notre base de tweets, et ce pour chaque manager. Même soucis que précédemment : tout ne va pas être pertinent. Par exemple puisque nous avons extrait des tweets pendant le match d'Arsenal face à Chelsea (score final 2-2) on va retrouvé abondamment des hashtags comme \og \#ARSCHE \fg{} ou encore \og \#AFCvCFC \fg{}. Il en va évidemment de même pour les autres matchs et pour Manchester United par analogie avec Arsenal. Nous avons donc mis en place un filtre (le script correspondant est \textit{hashtag.py}) pour palier à ce problème. Ensuite on a encore des hashtags qui risquent d'écraser les autres dans la représentation, on va donc les exclure de façon manuelle. Voici ce que l'on obtient.
+\begin{center}
+\includegraphics[scale=0.55]{Images/wenger_hash.png}
+\includegraphics[scale=0.55]{Images/mourinho_hash.png}
+\end{center} 
+\paragraph{}
+La première image concerne Arsène Wenger et outre les hashtags d'encouragement pour l'équipe (\#COYG pour \og Come On You Gunners \fg{}) et autres hashtags classiques, on remarque la prédominance du \#WengerOut (196 en tout) ce qui semble montrer la tendance quant au désir d'une partie des supporters d'Arsenal.\\
+Pour Mourinho c'est aussi similaire, on retrouve les mêmes types de hashtags et un \#MourinhoOut mais moins marqué (98 occurrences soit moitié moins que Wenger).
+\paragraph{}
+Si l'on s'en fie uniquement aux hashtags, il semblerait donc que le manager français d'Arsenal soit soumis à une plus grosse pression venant de ses supporters que son homologue portugais de Manchester United. Le bilan n'est pas pour autant positif pour José Mourinho...\\
+Notons tout de même qu'en général les gens auront plus tendance à s'exprimer pour critiquer quand les choses ne vont pas bien, que pour féliciter le manager après une victoire de l'équipe qu'il vont juger comme étant normale, presque comme étant une formalité. Cela peut donc biaiser les résultats.\\
+Autre problème potentiel qu'il ne nous est pas possible de détecter : l'ironie ! Sur Twitter, les gens aiment plaisanter et par exemple on peut trouver des tweets du style \og Another defeat for Arsenal... \#WengerIn \fg{} ou au contraire, des fervants supporters d'Arsène Wenger qui tweetent \og A brilliant win today by Arsenal, Mesut Özil was superb, but of course these idiots still want \#WengerOut \fg{}. Il est donc compliqué d'extraire le véritable sens d'un tweet de façon automatique, et il y aura donc quelques erreurs. Néanmoins, les résultats jusqu'ici tendent tout de même à confirmer le sentiment général concernant chaque manager. Nous allons maintenant nous pencher sur la confrontation entre Arsène Wenger et José Mourinho, en regardant de quelle façon ils sont décrits sur Twitter, puis en analysant dans un second temps les tweets dans lesquels les mots \og wenger \fg{} et \og mourinho \fg{} figurent en même temps.
+\section{La confrontation directe entre Wenger et Mourinho}
 
 \section{Bilan}
 

@@ -94,10 +94,16 @@ mourinho_neg_jj = [word[0].lower() for word in mourinho_tags_neg if word[1] == '
 mourinho_neg_jj = e.map(remove_useless,remove_useless(mourinho_neg_jj))
 mourinho_neg_jj = [word for word in mourinho_neg_jj if word != 'useless']
 
+# L'étiquetage n'est pas parfait, certains mots sont considérés comme des adjectifs alors qu'ils ne le sont pas : on les 
+# élimine "à la main" en créant une liste d'indésirables
+
+indes_wenger = ['own','arsenal','2-2','many','much','same','referee','other','such','wenger','only','next','suicide','ll','fuck','arsene','afc','farcical','re','ve','fucking','derby','tonight','whole','2-3','1-1','4-0','current','potential','double','crystal','lol','wish','able','810th','3-2','further','year-old','vs','victory','3-1']
+indes_mourinho = ['manutd','able','mourinho','same','much','other','next','mufc','many','derby','jose','enough','such','only','second','pre-manchester','2-2','re','2-0','ve','whole','arsenal','anti','utd','martial','due','ll','absolute','further','dive','half','fuck','league','utter','duncan','current','double','vs','4-2','isn','rid','lol','3-1','th']
+
 # Calcul des fréquences pour les adjectifs
 
 file = open('wenger_adj_pos.txt','w')
-fdist = FreqDist(word.lower() for word in wenger_pos_jj if len(word) > 1)
+fdist = FreqDist(word.lower() for word in wenger_pos_jj if len(word) > 1 and word.lower() not in indes_wenger)
 most_common = fdist.most_common(100)
 for i in range(len(most_common)):
     if most_common[i][1] > 1:
@@ -106,7 +112,7 @@ for i in range(len(most_common)):
 file.close()
 print('#################################################')
 file = open('wenger_adj_neg.txt','w')
-fdist = FreqDist(word.lower() for word in wenger_neg_jj if len(word) > 1)
+fdist = FreqDist(word.lower() for word in wenger_neg_jj if len(word) > 1 and word.lower() not in indes_wenger)
 most_common = fdist.most_common(100)
 for i in range(len(most_common)):
     if most_common[i][1] > 1:
@@ -115,7 +121,7 @@ for i in range(len(most_common)):
 file.close()
 print('#################################################')
 file = open('mourinho_adj_pos.txt','w')
-fdist = FreqDist(word.lower() for word in mourinho_pos_jj if len(word) > 1)
+fdist = FreqDist(word.lower() for word in mourinho_pos_jj if len(word) > 1 and word.lower() not in indes_mourinho)
 most_common = fdist.most_common(100)
 for i in range(len(most_common)):
     if most_common[i][1] > 1:
@@ -124,7 +130,7 @@ for i in range(len(most_common)):
 file.close()
 print('#################################################')
 file = open('mourinho_adj_neg.txt','w')
-fdist = FreqDist(word.lower() for word in mourinho_neg_jj if len(word) > 1)
+fdist = FreqDist(word.lower() for word in mourinho_neg_jj if len(word) > 1 and word.lower() not in indes_mourinho)
 most_common = fdist.most_common(100)
 for i in range(len(most_common)):
     if most_common[i][1] > 1:
